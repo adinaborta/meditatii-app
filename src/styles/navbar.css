@@ -1,0 +1,23 @@
+.navbar{
+    width: 100%;
+    position: sticky;
+    display: flex;
+    top:0;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #F5E9E2;
+    z-index: 100;
+    padding: 0.5rem;
+}
+
+.navbar-icons{
+    display: flex;
+    align-self: flex-end;
+}
+
+.path{
+    margin-left: 1rem;
+    cursor: pointer;
+    position: relative;
+}
+

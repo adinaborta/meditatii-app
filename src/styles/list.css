@@ -1,0 +1,177 @@
+.list-container{
+    position: relative;
+}
+
+.list-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-header h5{
+  margin: 0 0.5rem;
+}
+
+.list-options-bar{
+    display: flex;
+    align-items: center;
+}
+
+.list-header input{
+    border: none;
+    outline: none;
+    padding: 0;
+    transform: scaleX(0);
+    width:0;
+    transform-origin: left;
+    transition: 0.2s ease;
+    margin-right: 0.5rem;
+    background-color: transparent;
+}
+
+.list-header input.active-search-input{
+    transform: scaleX(1);
+    transition: 0.2s ease;
+    padding: 0.2rem;
+    width: 100px;
+}
+.list-item-preview-container{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.list-item-preview-container a{
+    width: 100%;
+}
+
+.list-item-preview-container h1, 
+.list-item-preview-container h2, 
+.list-item-preview-container h3, 
+.list-item-preview-container h4, 
+.list-item-preview-container h5, 
+.list-item-preview-container h6{
+    text-transform:capitalize;
+}
+
+.list-item-preview{
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #0B0014;
+    padding: 1rem;
+    margin: 1rem 0;
+    transition: 0.2s ease;
+    cursor: pointer;
+    height: fill;
+}
+
+.list-item-preview:hover{
+    transform: scale(1.05);
+    transition:0.2s ease;
+}
+
+.list-preview-container h4{
+    font-weight: bolder;
+}
+
+.gallery-view-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fill  , minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.list-actions{
+    height: fit-content;
+    width: 100%;
+}
+
+.list-action{
+    height: 0;
+    min-height: 0;
+    transition: 0.2s ease-in-out;
+    overflow: hidden;
+}
+
+.active-list-action{
+    height: fit-content;
+    min-height: 5vh;
+    overflow: visible;
+    transition: 0.2s ease-in-out;
+}
+
+.list-action-buttons{
+    height: 5vh;
+}
+
+.list-action-buttons > div.list-action-button{
+    padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.filter-by-container{
+    height: 0;
+    overflow: hidden;
+    display: none;
+    margin: auto 0;
+}
+
+.active-filter-by{
+    height: fit-content;
+    overflow: hidden;
+    display: block;
+    margin: 1rem 0;
+}
+
+.save-filters-button{
+    margin-left: auto;
+}
+
+.filter-by-deadline-container.active-filter-by{
+    display: flex;
+}
+
+.active-list-action{
+  margin-bottom: 1rem;
+}
+
+.list-action-button{
+  margin-right: 1rem;
+}
+
+.sort-icon{
+    transform: rotate(90deg);
+    height: 0 !important;
+    width: 0 !important;
+    transition: 0.2s ease;
+}
+
+.desc .sort-icon{
+    transform: rotate(-90deg);
+}
+
+.selected .sort-icon{
+    height: 1rem !important;
+    width: 1rem !important;
+    margin-left: 1rem;
+}
+
+.refresh-button{
+    margin-right: 1rem;
+    height: 0 !important;
+    width: 0 !important;
+    opacity: 0 !important;
+    transition: width 0.2s 0.2s, height 0.2s 0.2s, opacity 0.2s;
+}
+
+.refresh-button-visible{
+    height: 1rem !important;
+    width: 1rem !important;
+    opacity: 1 !important;
+    transition: width 0.2s, height 0.2s, opacity 0.2s 0.2s;
+}
