@@ -3,6 +3,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
+import axios from "axios";
+import { message } from "antd";
 
 // css
 import "./index.css";
@@ -14,8 +16,11 @@ import Screen from "./components/Screen";
 import HomeworkList from "./views/HomeworkList";
 import HomeworkSlide from "./views/HomeworkSlide";
 import ClassroomList from "./views/ClassroomList";
-import Upload from "./components/Upload";
+import ClassroomSlide from "./views/ClassroomSlide";
+import UploadFile from "./components/UploadFile";
 import EditProfileInformation from "./components/EditProfileInformation";
+import CalendarView from "./views/CalendarView";
+import EventView from "./views/EventView";
 
 // Supertokens
 import SuperTokens, {
@@ -26,7 +31,6 @@ import ThirdPartyEmailPassword, {
   Google,
 } from "supertokens-auth-react/recipe/thirdpartyemailpassword";
 import Session from "supertokens-auth-react/recipe/session";
-import CalendarView from "./views/CalendarView";
 SuperTokens.init({
   appInfo: {
     appName: "My Demo App",
@@ -66,6 +70,30 @@ SuperTokens.init({
   ],
 });
 
+axios.interceptors.request.use(
+  (req) => {
+    return req;
+  },
+  (err) => {
+    message.error(err.response.data.message);
+    return Promise.reject(err);
+  }
+);
+
+// For POST requests
+axios.interceptors.response.use(
+  (res) => {
+    if (res.status === 201 || res.status === 202) {
+      message.success(res.data.message);
+    }
+    return res;
+  },
+  (err) => {
+    message.error(err.response.data.message);
+    return Promise.reject(err);
+  }
+);
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
@@ -92,6 +120,16 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           }
         />
         <Route
+          path="/clase/vizualizare"
+          element={
+            <ThirdPartyEmailPasswordAuth>
+              <Screen>
+                <ClassroomSlide />
+              </Screen>
+            </ThirdPartyEmailPasswordAuth>
+          }
+        />
+        <Route
           exact
           path="/teme"
           element={
@@ -103,7 +141,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           }
         />
         <Route
-          path="/teme/vizualizare/:homeworkId"
+          exact
+          path="/teme/vizualizare"
           element={
             <ThirdPartyEmailPasswordAuth>
               <Screen>
@@ -119,6 +158,25 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               <Screen>
                 <CalendarView />
               </Screen>
+            </ThirdPartyEmailPasswordAuth>
+          }
+        />
+        <Route
+          path="/calendar/vizualizare"
+          element={
+            <ThirdPartyEmailPasswordAuth>
+              <Screen>
+                <EventView />
+              </Screen>
+            </ThirdPartyEmailPasswordAuth>
+          }
+        />
+        <Route
+          exact
+          path="/upload"
+          element={
+            <ThirdPartyEmailPasswordAuth>
+              <UploadFile />
             </ThirdPartyEmailPasswordAuth>
           }
         />

@@ -1,0 +1,12 @@
+.views-navbar{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.views-navbar > a > div{
+    min-width: 75px;
+    text-align: center;
+    border-radius: 0 !important;
+    padding: 0.5rem;
+}

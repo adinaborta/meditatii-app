@@ -30,6 +30,7 @@ module.exports = {
               "@border-radius-base": "5px",
               "@black": "#0B0014",
               "@item-hover-bg": "#0B001410",
+              "@heading-color": "inherit",
             },
             javascriptEnabled: true,
           },

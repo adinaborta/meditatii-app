@@ -1,4 +1,7 @@
-import React from "react";
+// react
+import React, { useState } from "react";
+
+// frontend libraries
 import {
   Select,
   TextField,
@@ -10,11 +13,50 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
+// api
+import { getHomeworkList } from "../../scripts/api";
+
+// my context
+import { useContext } from "react";
+import { Context } from "../Screen";
+
+// axios
+import axios from "axios";
+
 export default function AddHomeworkForm(props) {
+  // my states
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [deadline, setDeadline] = useState(new Date().addDays(1));
+  const [classroomId, setClassroomId] = useState("");
+
+  // context
+  const { classroomListComplete, setHomeworkListComplete, userId } =
+    useContext(Context);
+
+  function uploadHomework(e) {
+    e.preventDefault();
+    let body = {
+      title: title,
+      description: description,
+      classroom_id: classroomId,
+      deadline: deadline,
+      teacher_id: userId,
+    };
+    axios
+      .post(`http://localhost:3001/uploadHomework`, body)
+      .then((response) => {
+        console.log(response);
+        getHomeworkList(userId, setHomeworkListComplete);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
   return (
     <>
       <h1 style={{ margin: "2rem 0" }}>Posteaza o noua tema</h1>
-      <form className="popup-form" onSubmit={props.uploadHomework}>
+      <form className="popup-form" onSubmit={uploadHomework}>
         <div className="row">
           <TextField
             id="title"
@@ -23,7 +65,7 @@ export default function AddHomeworkForm(props) {
             fullWidth
             required
             onChange={(event) => {
-              props.setTitle(event.target.value);
+              setTitle(event.target.value);
             }}
           />
         </div>
@@ -36,7 +78,7 @@ export default function AddHomeworkForm(props) {
             required
             multiline
             onChange={(event) => {
-              props.setDescription(event.target.value);
+              setDescription(event.target.value);
             }}
           />
         </div>
@@ -45,9 +87,9 @@ export default function AddHomeworkForm(props) {
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DateTimePicker
                 label="Deadline"
-                value={props.deadline}
+                value={deadline}
                 onChange={(event) => {
-                  props.setDeadline(event);
+                  setDeadline(event);
                 }}
                 fullWidth
                 minDateTime={new Date().getTime() + 3500000}
@@ -62,18 +104,20 @@ export default function AddHomeworkForm(props) {
                 labelId="classroom-id-label"
                 id="classroom-id"
                 label="Clasa"
-                value={props.classroomId}
+                value={classroomId}
                 onChange={(event) => {
-                  props.setClassroomId(event.target.value);
+                  setClassroomId(event.target.value);
                 }}
               >
-                {props.classroomList.map(({ classroom_id, name, subject }) => {
-                  return (
-                    <MenuItem value={classroom_id} key={classroom_id}>
-                      #{classroom_id} - {name} ({subject})
-                    </MenuItem>
-                  );
-                })}
+                {classroomListComplete.map(
+                  ({ classroom_id, name, subject }) => {
+                    return (
+                      <MenuItem value={classroom_id} key={classroom_id}>
+                        #{classroom_id} - {name} ({subject})
+                      </MenuItem>
+                    );
+                  }
+                )}
               </Select>
             </FormControl>
           </div>
@@ -81,7 +125,7 @@ export default function AddHomeworkForm(props) {
 
         <button
           type="submit"
-          className="outline-to-fill"
+          className="fill"
           style={{ padding: "1rem", marginTop: "1rem" }}
         >
           Salveaza

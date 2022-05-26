@@ -1,5 +1,7 @@
+// react
 import React, { useState } from "react";
-import { useFormControl } from "@mui/material/FormControl";
+
+// frontend libraries
 import {
   FormControl,
   TextField,
@@ -8,24 +10,42 @@ import {
   InputLabel,
   Box,
 } from "@mui/material";
+
+// css
 import "../styles/edit_profile.css";
-import { useSessionContext } from "supertokens-auth-react/recipe/session";
+
+// router
 import { useNavigate } from "react-router-dom";
+
+// my context
+import { Context } from "../components/Screen";
+import { useContext } from "react";
+
+// useSessionContext
+import { useSessionContext } from "supertokens-auth-react/recipe/session";
+
+// axios
 const axios = require("axios").default;
 
 export default function EditProfileInformation() {
+  // navigate
+  const navigate = useNavigate();
+
+  // my states
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [role, setRole] = useState("");
-  const user_id = useSessionContext().userId;
-  const navigate = useNavigate();
+
+  // userId
+  const userId = useSessionContext().userId;
+
   async function updateUserInfo(e) {
     e.preventDefault();
     let body = {
       name: name,
       surname: surname,
       role: role,
-      user_id: user_id,
+      user_id: userId,
     };
     await axios
       .post(`http://localhost:3001/setUserInfo`, body)
@@ -81,11 +101,7 @@ export default function EditProfileInformation() {
             <MenuItem value="teacher">Profesor</MenuItem>
           </Select>
         </FormControl>
-        <button
-          type="submit"
-          className="outline-to-fill"
-          style={{ padding: "1rem" }}
-        >
+        <button type="submit" className="fill" style={{ padding: "1rem" }}>
           Salveaza
         </button>
       </form>

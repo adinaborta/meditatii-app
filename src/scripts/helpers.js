@@ -9,6 +9,12 @@ Date.prototype.addDays = function (days) {
   return date;
 };
 
+Date.prototype.addHours = function (hours) {
+  const date = new Date(this.valueOf());
+  date.setDate(date.getHours() + hours);
+  return date;
+};
+
 export function filterListBySearch(substring, listComplete) {
   let listTemp = [...listComplete];
   listTemp = listTemp.filter((object) => {
@@ -44,20 +50,20 @@ export function filterListByDateInterval(key, from, to, listComplete) {
 }
 
 export function compareByTitle(a, b) {
-  if (a.title < b.title) {
+  if (a.title.toLowerCase() < b.title.toLowerCase()) {
     return -1;
   }
-  if (a.title > b.title) {
+  if (a.title.toLowerCase() > b.title.toLowerCase()) {
     return 1;
   }
   return 0;
 }
 
 export function compareByTitleDesc(a, b) {
-  if (a.title < b.title) {
+  if (a.title.toLowerCase() < b.title.toLowerCase()) {
     return 1;
   }
-  if (a.title > b.title) {
+  if (a.title.toLowerCase() > b.title.toLowerCase()) {
     return -1;
   }
   return 0;
@@ -104,20 +110,20 @@ export function compareByDeadlineDesc(a, b) {
 }
 
 export function compareByName(a, b) {
-  if (a.name < b.name) {
+  if (a.name.toLowerCase() < b.name.toLowerCase()) {
     return -1;
   }
-  if (a.name > b.name) {
+  if (a.name.toLowerCase() > b.name.toLowerCase()) {
     return 1;
   }
   return 0;
 }
 
 export function compareByNameDesc(a, b) {
-  if (a.name < b.name) {
+  if (a.name.toLowerCase() < b.name.toLowerCase()) {
     return 1;
   }
-  if (a.name > b.name) {
+  if (a.name.toLowerCase() > b.name.toLowerCase()) {
     return -1;
   }
   return 0;
@@ -132,26 +138,18 @@ export function getApiConfig() {
   };
 }
 
-export function getHomeworkList(user_id, setHomeworkListComplete) {
-  axios
-    .get(`http://localhost:3001/getHomeworksForUser?user_id=${user_id}`)
-    .then(function (response) {
-      setHomeworkListComplete(response.data);
-    });
-}
-
-export function getClassroomList(user_id, setClassroomListComplete) {
-  axios
-    .get(`http://localhost:3001/getClassroomsForUser?user_id=${user_id}`)
-    .then(function (response) {
-      setClassroomListComplete(response.data);
-    });
-}
-
 export function getIdxOfHomeworkById(homework_id, homeworkListComplete) {
   for (let i = 0; i < homeworkListComplete.length; i++) {
     if (homeworkListComplete[i].homework_id == homework_id) {
-      console.log(homeworkListComplete[i].homework_id, homework_id, i);
+      // console.log(homeworkListComplete[i].homework_id, homework_id, i);
+      return i;
+    }
+  }
+}
+export function getIdxOfClassroomById(classroom_id, classroomListComplete) {
+  for (let i = 0; i < classroomListComplete.length; i++) {
+    if (classroomListComplete[i].classroom_id == classroom_id) {
+      // console.log(classroomListComplete[i].classroom_id, classroom_id, i);
       return i;
     }
   }
@@ -166,6 +164,18 @@ export function getObjectByDate(date, list, key) {
       dateParam.getDate() == dateProp.getDate() &&
       dateParam.getMonth() == dateProp.getMonth() &&
       dateParam.getYear() == dateProp.getYear()
+    ) {
+      listTemp.push(list[i]);
+    } else if (
+      list[i].recurring === "weekly" &&
+      dateProp <= dateParam &&
+      dateParam.getDay() == dateProp.getDay()
+    ) {
+      listTemp.push(list[i]);
+    } else if (
+      list[i].recurring === "monthly" &&
+      dateProp <= dateParam &&
+      dateParam.getDate() == dateProp.getDate()
     ) {
       listTemp.push(list[i]);
     }
@@ -186,4 +196,36 @@ export function getObjectByMonth(date, list, key) {
     }
   }
   return listTemp;
+}
+
+export function keepOneActive(active, current, activeClass) {
+  console.log(current);
+  if (current === active) {
+    current.classList.remove(activeClass);
+  } else {
+    if (active) {
+      current.classList.add(activeClass);
+      active.classList.remove(activeClass);
+    } else {
+      current.classList.add(activeClass);
+    }
+  }
+}
+
+export function getLocation(location, params) {
+  const basePath = location.pathname;
+  const search = new URLSearchParams(location.search);
+  let path = basePath + "?";
+  search.forEach(function (value, key) {
+    if (!params[key]) {
+      params[key] = value;
+    }
+  });
+  Object.keys(params).forEach(function (key, i) {
+    if (i > 0) {
+      path += "&";
+    }
+    path += key + "=" + params[key];
+  });
+  return path;
 }

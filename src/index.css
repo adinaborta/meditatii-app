@@ -32,9 +32,13 @@ code {
   box-sizing: border-box !important;
 }
 
-h1, h2, h3, h4, h5, h6{
-  margin:0 !important;
-  color: inherit !important;
+body h1, 
+body h2,
+body h3, 
+body h4,
+body h5,
+body h6{
+  margin: 0 ;
 }
 
 .screen{
@@ -65,7 +69,7 @@ h1, h2, h3, h4, h5, h6{
   height: 1rem !important;
 }
 
-.icon-container-big{
+.icon-container-medium{
   border-radius: 50% !important;
 
   width: 2.5rem!important;
@@ -73,7 +77,17 @@ h1, h2, h3, h4, h5, h6{
   padding: 0.5rem !important;
 }
 
-.icon-container-huge{
+
+.icon-container-big{
+  border-radius: 50% !important;
+  
+  width: 3rem!important;
+  height: 3rem!important;
+  padding: 0.5rem !important;
+}
+
+
+.icon-container-bigger{
   border-radius: 50% !important;
   
   width: 4rem!important;
@@ -81,9 +95,31 @@ h1, h2, h3, h4, h5, h6{
   padding: 0.5rem !important;
 }
 
-.icon-container svg, .icon-container-small svg, .icon-container-big svg, .icon-container-huge svg{
+.icon-container-huge{
+  border-radius: 50% !important;
+  
+  width: 5rem!important;
+  height: 5rem!important;
+  padding: 0.5rem !important;
+}
+
+.icon-container-with-text{
+  border-radius: 2.5rem !important;
+  height: 2.5rem!important;
+  padding: 0.5rem !important;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.icon-container svg, .icon-container-small svg, .icon-container-medium svg, .icon-container-bigger svg,.icon-container-big svg, .icon-container-huge svg{
   width: 100%;
   height: 100%;
+}
+
+.icon-container-with-text svg{
+  height: 100%;
+  width: auto;
 }
 
 .divider{
@@ -105,12 +141,13 @@ h1, h2, h3, h4, h5, h6{
 
 .background-asset{
   position: absolute;
-  min-width: 100%;
+  width: 100%;
   left: 0;
   bottom: 0;
-  max-height: 40vh;
-  min-height: 30vh;
+  max-height:40vh !important;
+  min-height: 20vh;
 }
+
 
 .not-found{
   width: 100%;
@@ -119,10 +156,9 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .not-found h1{
-  font-size: 4rem;
+  font-size: 3rem;
   font-weight: lighter !important;
-  font-family: 'Sacramento', cursive;
-  color:#0B0014;
+  /* font-family: 'Sacramento', cursive; */
 }
 
 .slider{
@@ -189,7 +225,7 @@ a{
 .text-to-outline:hover{
   transition: 0.2s ease;
   border-color:#548687;
-  color:#548687;
+  color:#548687 !important;
 }
 
 .outline-to-fill{
@@ -247,6 +283,7 @@ a{
   cursor: pointer;
   padding: 0.3rem 0.5rem;
   border-radius: 5px;
+  border: none;
 
   transition: 0.2s ease;
   color:white !important;
@@ -256,6 +293,24 @@ a{
 .fill:hover{
   transition: 0.2s ease;
   background: #38595a;
+  color:white !important;
+}
+
+
+.bg-green-to-bg-black{
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  border-radius: 5px;
+  border: none;
+
+  transition: 0.2s ease;
+  color:white !important;
+  background-color: #548687;
+}
+
+.bg-green-to-bg-black:hover{
+  transition: 0.2s ease;
+  background: #0B0014;
 }
 
 .text-to-underline{
@@ -305,6 +360,10 @@ label.Mui-focused{
 
 .color-light{
   color: #0B001480
+}
+
+.color-green{
+  color: #548687 ;
 }
 
 .row{
@@ -384,4 +443,117 @@ label.Mui-focused{
 
 .slash{
   margin: 0 0.5rem !important;
+}
+
+.row span{
+  width: 100%;
+}
+
+
+form button{
+  width: 100%;
+}
+
+.hidden-container{
+  display: none !important;
+  overflow: hidden !important;
+}
+
+.list-options-bar h5{
+  margin: 0 0.5rem !important;
+}
+
+img{
+  max-width: 100%!important;
+  max-height: 100%!important;
+}
+
+.cover{
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.big-cover{
+  width: 100%;
+  height: 40vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.cover img, .big-cover img{
+  object-fit: cover;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.cover-edit-icon{
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 10;
+}
+
+.text-in-icon-container{
+  max-width: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: 0.2s ease;
+}
+
+.big-cover:hover .text-in-icon-container{
+  max-width: 100px;
+  opacity: 1;
+  transition: 0.2s ease;
+  margin-left: 0.5rem;
+}
+
+.item-details{
+  padding: 3rem 5rem;
+}
+
+.emoji-rating{
+  height: 2rem;
+  margin: 2rem 0;
+}
+
+.emoji-rating h2{
+  margin-right: 2rem
+}
+
+.emoji-rating img{
+  height: 2rem;
+}
+
+.emoji-picker-react, .emoji-search, .emoji-picker-react .emoji-group:before{
+  background-color: #F5E9E2 !important;
+  background: #F5E9E2 !important;
+  z-index: 2 !important;
+}
+
+.emoji-picker-react{
+  /* box-shadow: 0 5px 10px #7B5E7B !important; */
+  box-shadow: none !important;
+  border: 1px solid #548687 !important;
+  width: 100% !important;
+}
+
+.emoji-picker-react input.emoji-search{
+  border-color: #548687 !important;
+}
+
+.emoji-picker-react .active-category-indicator-wrapper .active-category-indicator{
+  background: #548687 !important;
+}
+
+
+.section{
+  margin-bottom: 4rem;
 }

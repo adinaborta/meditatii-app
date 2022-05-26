@@ -36,22 +36,10 @@
     justify-content: space-between;
 }
 
-.overdue-preview .homework-row-main-info{
-    color: #EF546f;
-}
-
-
-.overdue-preview .homework-row-main-info h3{
-    color: #EF546f;
-}
 
 .details-view .homework-row-main-info{
     padding-top: 0;
     transition: 0.2s ease;
-}
-
-.overdue-preview{
-    border: 3px solid #EF546F;
 }
 
 .overdue-preview .due-time{
@@ -98,4 +86,17 @@
 
 .homework-details .instructions{
     margin-top: 2rem;
+}
+
+.homework-response-container{
+    width: 100%;
+    padding: 1rem;
+}
+
+.homework-completed{
+    color:#548687;
+}
+
+.homework-completed .due-time{
+    color:#548687 !important;
 }

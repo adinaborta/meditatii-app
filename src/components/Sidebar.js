@@ -29,12 +29,12 @@ export default function Sidebar() {
           <h5>Teme</h5>
         </div>
       </Link>
-      <div className="sidebar-tab">
+      {/* <div className="sidebar-tab">
         <div className="icon-container">
           <Icon icon="fluent:clipboard-task-list-rtl-24-filled" />
         </div>
         <h5>Teste</h5>
-      </div>
+      </div> */}
       <Link to="/clase">
         <div className="sidebar-tab">
           <div className="icon-container">
@@ -43,12 +43,12 @@ export default function Sidebar() {
           <h5>Clase</h5>
         </div>
       </Link>
-      <div className="sidebar-tab">
+      {/* <div className="sidebar-tab">
         <div className="icon-container">
           <Icon icon="bxs:book-bookmark" />
         </div>
         <h5>Materiale</h5>
-      </div>
+      </div> */}
       <Link to="/calendar">
         <div className="sidebar-tab">
           <div className="icon-container">

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useSessionContext } from "supertokens-auth-react/recipe/session";
 
 const homeworks = [
   {

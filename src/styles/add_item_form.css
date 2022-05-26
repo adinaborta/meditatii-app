@@ -4,16 +4,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
+    position: fixed;
     top:0;
     left:0;
-    z-index: 100;
+    z-index: 1000;
     background-color: #0B001480;
 }
 
 .popup-form-container{
-    width: 80%;
+    width: 60%;
     height: 80%;
+    min-width: 500px;
     background-color: #F5E9E2;
     border-radius: 12px;
     box-shadow: 0 0 10px #0B001450;

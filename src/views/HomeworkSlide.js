@@ -1,71 +1,124 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../components/Screen";
-import { Icon } from "@iconify/react";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import UploadHomeworkResponse from "../components/homework/UploadHomeworkResponse";
+import HomeworkDetails from "../components/homework/HomeworkDetails";
+import ClassroomPeople from "../components/classroom/ClassroomPeople";
 import { getIdxOfHomeworkById } from "../scripts/helpers.js";
-import { Link } from "react-router-dom";
+import { useQuery } from "../scripts/hooks";
+import axios from "axios";
+
+// helpers
+import { getClassroomUsers } from "../scripts/api";
+
+// router
+import { Link, useLocation } from "react-router-dom";
+
+// useBasePath
+import { useBasePath } from "../scripts/hooks";
+import HomeworkResponse from "../components/homework/HomeworkResponse";
 
 export default function HomeworkSlide(props) {
-  const { homeworkId } = useParams();
+  // useNavigate
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // useQuery
+  const query = useQuery();
+  const homeworkId = query.get("homeworkId") ? query.get("homeworkId") : -1;
+  const activeView = query.get("activeView") ? query.get("activeView") : "1";
+  const studentId = query.get("studentId") ? query.get("studentId") : null;
+
+  // context
+  const { homeworkListComplete, role, userId } = useContext(Context);
+
+  // my states
   const [homework, setHomework] = useState([]);
-  const { homeworkListComplete, setPath } = useContext(Context);
+  const [homeworkResponse, setHomeworkResponse] = useState(null);
+
+  // useBasePath
+  const path = useBasePath();
+
+  function openHomeworkResponse(studentId) {
+    navigate(location.pathname + location.search + "&studentId=" + studentId);
+  }
+
+  async function getHomeworkResponse(id) {
+    await axios
+      .get(
+        `http://localhost:3001/getHomeworkResponses?user_id=${id}&homework_id=${homeworkId}`
+      )
+      .then(function (response) {
+        let documents = response.data.documents.responseData;
+        let markup = response.data.markup.responseData;
+        setHomeworkResponse({ documents, markup });
+      });
+  }
+
+  useEffect(() => {
+    if (role === "student") {
+      getHomeworkResponse(userId);
+    }
+    if (studentId && role === "teacher") {
+      getHomeworkResponse(studentId);
+    }
+  }, [role, studentId]);
 
   useEffect(() => {
     let homeworkIdx = getIdxOfHomeworkById(homeworkId, homeworkListComplete);
     setHomework(homeworkListComplete[homeworkIdx]);
   }, [homeworkListComplete]);
 
-  useEffect(() => {
-    if (homework)
-      setPath([
-        { route: "/teme", header: "Teme" },
-        {
-          route: `/teme/vizualizare/${homeworkId}`,
-          header: homework.title,
-        },
-      ]);
-  }, [homework]);
-
   return (
     <div className="container scrollable-container">
-      {homework && (
-        <div
-          className={`homework-details ${
-            new Date(homework.deadline) < new Date() ? "overdue" : ""
-          } homework-preview-slide`}
-        >
-          <h1>
-            {homework.title} - {homework.name}
-          </h1>
-          <div
-            className="inline-container"
-            style={{
-              color: "#0B001480",
-              margin: "0.5rem 0",
-            }}
-          >
-            <div
-              className="icon-container-small"
-              style={{ marginRight: "0.5rem" }}
-            >
-              <Icon icon="bi:clock" />
-            </div>
-            <h5 className="due-time">{homework.deadline}</h5>
-          </div>
-          <h3 className="instructions">Instructiuni: </h3>
-          <p style={{ margin: "0" }}>{homework.description}</p>
+      <div className="list-header">
+        <div className="inline-container"></div>
+        <div className="list-options-bar">
+          <Link to={`${path}?homeworkId=${homeworkId}&activeView=1`}>
+            <h5 className="text-to-outline">Informatii</h5>
+          </Link>
+          <Link to={`${path}?homeworkId=${homeworkId}&activeView=2`}>
+            <h5 className="text-to-outline">Submisii</h5>
+          </Link>
         </div>
+      </div>
+      <div className="divider"></div>
+      {homework && (
+        <>
+          {activeView === "1" && <HomeworkDetails homework={homework} />}
+          {activeView === "2" && (
+            <>
+              {!studentId && role === "teacher" && (
+                <ClassroomPeople
+                  classroomId={homework.classroom_id}
+                  onClick={openHomeworkResponse}
+                  studentsOnly={true}
+                />
+              )}
+              {homeworkResponse && (studentId || role === "student") && (
+                <>
+                  <HomeworkDetails
+                    homework={homework}
+                    homeworkResponse={homeworkResponse}
+                    activeView={2}
+                  />
+                  <HomeworkResponse homeworkResponse={homeworkResponse} />
+                </>
+              )}
+            </>
+          )}
+        </>
       )}
 
       {/* <Link
         to={
           parseInt(homeworkIdx) === homeworkListComplete.length - 1
-            ? `/teme/vizualizare/0`
-            : `/teme/vizualizare/${parseInt(homeworkIdx) + 1}`
+            ? `/teme/vizualizare/0/false`
+            : `/teme/vizualizare/${parseInt(homeworkIdx) + 1}/false`
         }
       >
         <div
-          className="icon-container-big outline-to-fill next-button"
+          className="icon-container-medium outline-to-fill next-button"
           id="next-button"
         >
           <Icon icon="akar-icons:chevron-right" />
@@ -74,12 +127,12 @@ export default function HomeworkSlide(props) {
       <Link
         to={
           parseInt(homeworkIdx) === 0
-            ? `/teme/vizualizare/${homeworkListComplete.length - 1}`
-            : `/teme/vizualizare/${parseInt(homeworkIdx) - 1}`
+            ? `/teme/vizualizare/${homeworkListComplete.length - 1}/false`
+            : `/teme/vizualizare/${parseInt(homeworkIdx) - 1}/false`
         }
       >
         <div
-          className="icon-container-big outline-to-fill prev-button"
+          className="icon-container-medium outline-to-fill prev-button"
           id="prev-button"
         >
           <Icon icon="akar-icons:chevron-right" />

@@ -1,16 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/add_item_form.css";
 
-export default function AddItem(props) {
+export default function Popup(props) {
+  const navigate = useNavigate();
   return (
     <>
-      {props.open && (
+      {props.isOpen && (
         <div
           className="popup-form-exterior"
           id="popup-form-exterior"
           onClick={(e) => {
             if (e.target.id === "popup-form-exterior") {
-              props.setOpen(false);
+              navigate(-1);
             }
           }}
         >

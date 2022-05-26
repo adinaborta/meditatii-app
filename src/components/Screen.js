@@ -5,7 +5,12 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSessionContext } from "supertokens-auth-react/recipe/session";
-import { getHomeworkList, getClassroomList } from "../scripts/helpers";
+import Popup from "../components/Popup";
+import PopupContent from "../components/PopupContent";
+import { getHomeworkList, getClassroomList } from "../scripts/api";
+
+// query
+import { useQuery } from "../scripts/hooks";
 
 export const Context = React.createContext();
 export default function Screen(props) {
@@ -13,34 +18,45 @@ export default function Screen(props) {
   const [role, setRole] = useState("");
   const [homeworkListComplete, setHomeworkListComplete] = useState([]);
   const [classroomListComplete, setClassroomListComplete] = useState([]);
-  const user_id = useSessionContext().userId;
+  const [userId, setUserId] = useState(useSessionContext().userId);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    let roleTemp = Cookies.get(`role_${user_id}`);
+  // useQuery
+  const query = useQuery();
+  const openPopup = query.get("openPopup") ? query.get("openPopup") : false;
+
+  function roleSetup() {
+    let roleTemp = Cookies.get(`role_${userId}`);
     if (!roleTemp) {
       console.log("axios.getRole");
       axios
-        .get(`http://localhost:3001/getRole?user_id=${user_id}`)
+        .get(`http://localhost:3001/getRole?user_id=${userId}`)
         .then(function (response) {
-          let roleTemp = response.data.role;
+          let roleTemp = response.data.responseData.role;
           if (roleTemp) {
-            Cookies.set(`role_${user_id}`, roleTemp);
+            Cookies.set(`role_${userId}`, roleTemp);
+            console.log("setRole: ", roleTemp);
+            setRole(roleTemp);
           } else {
             navigate("/edit-profile-informations");
           }
+        })
+        .catch(() => {
+          navigate("/edit-profile-informations");
         });
     } else {
       console.log("Cookies: ", roleTemp);
-    }
-    if (!role) {
       console.log("setRole: ", roleTemp);
       setRole(roleTemp);
     }
 
     console.log("setListsComplete");
-    getHomeworkList(user_id, setHomeworkListComplete);
-    getClassroomList(user_id, setClassroomListComplete);
+    getHomeworkList(userId, setHomeworkListComplete);
+    getClassroomList(userId, setClassroomListComplete);
+  }
+
+  useEffect(() => {
+    roleSetup();
   }, []);
 
   return (
@@ -54,15 +70,23 @@ export default function Screen(props) {
         setHomeworkListComplete,
         classroomListComplete,
         setClassroomListComplete,
+        userId,
+        setUserId,
       }}
     >
       <div className="screen">
         <Sidebar />
         <div className="main-container">
-          <Navbar path="Teme" />
+          <Navbar path="Teme" />{" "}
+          <h5 style={{ position: "fixed", bottom: "1rem", right: "1rem" }}>
+            {role} {userId}
+          </h5>
           {props.children}
         </div>
       </div>
+      <Popup isOpen={openPopup}>
+        <PopupContent openPopup={openPopup} />
+      </Popup>
     </Context.Provider>
   );
 }
